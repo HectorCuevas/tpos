@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:padding="13dp">
+    <RelativeLayout
+        android:id="@+id/layoutAddress"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="5dp"
+        android:background="#e0e0e0"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/imgName"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_baseline_location_city_24px" />
+
+        <EditText
+            android:id="@+id/txtAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/imgName"
+            android:hint="Direccion" />
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:onClick="clearAddress"
+            android:src="@drawable/ic_round_close_24px" />
+        <TextView
+            android:layout_toRightOf="@id/imgName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="*Optional"
+            android:layout_marginLeft="15dp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/layoutMunicipio"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@id/layoutAddress"
+        android:layout_marginTop="10dp"
+        android:background="#e0e0e0"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/imgName1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_baseline_add_location_24px" />
+
+        <EditText
+            android:id="@+id/txtMunicipio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/imgName1"
+            android:hint="Municipio" />
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:onClick="clearMunicipio"
+            android:src="@drawable/ic_round_close_24px" />
+        <TextView
+            android:layout_toRightOf="@id/imgName1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="*Optional"
+            android:layout_marginLeft="15dp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/layoutDepartamento"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@id/layoutMunicipio"
+        android:layout_marginTop="10dp"
+        android:background="#e0e0e0"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/imgName2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_baseline_add_location_24px" />
+
+        <EditText
+            android:id="@+id/txtDepartamento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/imgName2"
+            android:hint="Departamento" />
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_alignParentRight="true"
+            android:onClick="clearDepartamento"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_round_close_24px" />
+        <TextView
+            android:layout_toRightOf="@id/imgName2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="*Optional"
+            android:layout_marginLeft="15dp"/>
+    </RelativeLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#de1b1e"
+        android:textColor="#fff"
+        android:text="Tomar fotografias"
+        android:layout_alignParentBottom="true"
+        android:onClick="changePhotoActivity"/>
+</RelativeLayout>
