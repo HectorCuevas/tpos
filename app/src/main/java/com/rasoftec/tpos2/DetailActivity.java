@@ -33,10 +33,10 @@ public class DetailActivity extends AppCompatActivity {
         String nit = txtNit.getText().toString();
         String cel = txtCel.getText().toString();
         //ArrayList<String> params = new ArrayList<>();
-        ApplicationTpos.params.add(name);
-        ApplicationTpos.params.add(dpi);
-        ApplicationTpos.params.add(nit);
-        ApplicationTpos.params.add(cel);
+        ApplicationTpos.params.add(dpi);//0
+        ApplicationTpos.params.add(name);//1
+        ApplicationTpos.params.add(nit);//2
+        ApplicationTpos.params.add(cel);//3
         Intent changeActivity = new Intent(this, locationActivity.class);
         //changeActivity.putExtra("list", params);
         startActivity(changeActivity);
