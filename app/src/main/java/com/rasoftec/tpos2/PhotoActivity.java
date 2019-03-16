@@ -23,9 +23,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.rasoftec.ApplicationTpos;
 import com.rasoftec.tpos.R;
+import com.rasoftec.tpos2.data.database;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
+
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.support.v4.content.FileProvider.getUriForFile;
@@ -38,6 +46,8 @@ public class PhotoActivity extends AppCompatActivity {
 
     final int COD_SELECCIONA=10;
     final int COD_FOTO=20;
+
+    database db;
 
     Button botonCargar;
     ImageView imagen;
@@ -230,4 +240,51 @@ public class PhotoActivity extends AppCompatActivity {
         db.insert(TABLE_CONTACTS, null, values);
         db.close(); // Closing database connection
     }*/
+    public void addJsonArray(ArrayList<String> detail){
+        try{
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("usuario_movilizandome", "");
+            jsonObject.put("cod_cliente", "");
+            jsonObject.put("forma_pago", "CONT");
+            jsonObject.put("total", "");
+            jsonObject.put("cobrado", "decimal");
+            jsonObject.put("procesado", "S");
+            jsonObject.put("num_factura", "");
+            jsonObject.put("cobrado_2", "");
+            jsonObject.put("fecha", "");
+            jsonObject.put("latitud", "");
+            jsonObject.put("longitud", "");
+            /*** required fields ***/
+            jsonObject.put("dpi", detail.get(0));
+            jsonObject.put("nombre_cliente", "");
+            jsonObject.put("nit", "");
+            jsonObject.put("direccion", "");
+            jsonObject.put("departamento", "");
+            jsonObject.put("municipio", "");
+            jsonObject.put("zona", "");
+            jsonObject.put("email", "");
+            //jsonObject.put("dpi_frontal", "");
+            //jsonObject.put("dpi_trasero", "");
+            storeDatabase(jsonObject);
+        }catch (JSONException e){
+            Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void storeDatabase(JSONObject jsonObject){
+        try{
+            db.set_venta(jsonObject);
+        }catch (Exception e){
+            Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void checkout(View view){
+        addJsonArray(ApplicationTpos.params);
+        Intent cambiarActividad = new Intent(this, PhotoActivity.class);
+        startActivity(cambiarActividad);
+        if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
+            startActivity(cambiarActividad);
+        }
+    }
 }
