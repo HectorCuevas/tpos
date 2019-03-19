@@ -30,6 +30,7 @@ import com.rasoftec.tpos2.data.database;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ import java.util.ArrayList;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.support.v4.content.FileProvider.getUriForFile;
+import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
+import static com.rasoftec.ApplicationTpos.p;
 
 
 public class PhotoActivity extends AppCompatActivity {
@@ -48,10 +51,12 @@ public class PhotoActivity extends AppCompatActivity {
     final int COD_FOTO=20;
 
     database db;
-
+    Bitmap bitmap;
     Button botonCargar;
     ImageView imagen;
     String path;
+    database base;
+    byte[] byteArray;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -221,8 +226,10 @@ public class PhotoActivity extends AppCompatActivity {
                                 }
                             });
 
-                    Bitmap bitmap= BitmapFactory.decodeFile(path);
+                    bitmap= BitmapFactory.decodeFile(path);
                     imagen.setImageBitmap(bitmap);
+
+                   // db.addEntry("photo1", byteArray);
 
                     break;
             }
@@ -254,18 +261,24 @@ public class PhotoActivity extends AppCompatActivity {
             jsonObject.put("fecha", "");
             jsonObject.put("latitud", "");
             jsonObject.put("longitud", "");
+
+            //jsonObject.put("latitud", "");
+            //jsonObject.put("longitud", "");
+
             /*** required fields ***/
             jsonObject.put("dpi", detail.get(0));
-            jsonObject.put("nombre_cliente", "");
-            jsonObject.put("nit", "");
-            jsonObject.put("direccion", "");
-            jsonObject.put("departamento", "");
-            jsonObject.put("municipio", "");
-            jsonObject.put("zona", "");
-            jsonObject.put("email", "");
+            jsonObject.put("nombre_cliente", detail.get(1));
+            jsonObject.put("nit", detail.get(2));
+            jsonObject.put("direccion", detail.get(3));
+            jsonObject.put("municipio", detail.get(4));
+            jsonObject.put("departamento", detail.get(5));
+            //faltantes
+            jsonObject.put("zona", detail.get(7));
+            jsonObject.put("email", detail.get(8));
+
             //jsonObject.put("dpi_frontal", "");
             //jsonObject.put("dpi_trasero", "");
-            storeDatabase(jsonObject);
+            //storeDatabase(jsonObject);
         }catch (JSONException e){
             Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
         }
@@ -280,11 +293,22 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void checkout(View view){
-        addJsonArray(ApplicationTpos.params);
+       /* SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues cv = new  ContentValues();
+        newFactura_encabezado.setDpiFrontal(imagen);
+        Toast.makeText(this,""+newFactura_encabezado.getGhh(), Toast.LENGTH_LONG ).show();
+        // addJsonArray(ApplicationTpos.params);
         Intent cambiarActividad = new Intent(this, PhotoActivity.class);
         startActivity(cambiarActividad);
         if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
             startActivity(cambiarActividad);
-        }
+        }*/
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_baseline_email_24px);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,50,stream);
+        byte[] byteArray = stream.toByteArray();
+        Toast.makeText(this, ""+byteArray, Toast.LENGTH_LONG).show();
+        base.addEntry("asd", byteArray);
     }
 }

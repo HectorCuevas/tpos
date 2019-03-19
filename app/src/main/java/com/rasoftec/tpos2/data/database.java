@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
@@ -161,9 +162,24 @@ public class database extends SQLiteOpenHelper {
                 "  \"departamento\" VARCHAR(50),\n" +
                 "  \"municipio\" VARCHAR(50),\n" +
                 "  \"zona\" VARCHAR(50),\n" +
-                "  \"email\" VARCHAR(50)\n" +
+                "  \"email\" VARCHAR(50), \n" +
+                "  \"key_name\" text,\n" +
+                "  \"key_name\" blob\n" +
+                "); ");
+        db.execSQL(" CREATE TABLE \"imagenes\"(\n" +
+                "  \"id_imagen\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                "  \"key_name\" TEXT,\n" +
+                "  \"key_image\" BLOB\n" +
                 "); ");
     }
+    public void addEntry( String name, byte[] image) throws SQLiteException {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues cv = new  ContentValues();
+        cv.put("key_name", name);
+        cv.put("key_image", image);
+        database.insert( "imagenes", null, cv );
+    }
+
 
     //    Limpiar Cierre
     public void limpiar_cierre() {

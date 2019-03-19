@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:padding="13dp">
+    android:padding="10dp">
     <RelativeLayout
         android:id="@+id/layoutAddress"
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="*Optional"
+            android:text="Requerido"
             android:layout_marginLeft="15dp"/>
     </RelativeLayout>
     <RelativeLayout
@@ -126,6 +126,50 @@
             android:src="@drawable/ic_round_close_24px" />
         <TextView
             android:layout_toRightOf="@id/imgName2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="*Optional"
+            android:layout_marginLeft="15dp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/layoutZona"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@id/layoutDepartamento"
+        android:layout_marginTop="10dp"
+        android:background="#e0e0e0"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/imgName3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_baseline_add_location_24px" />
+
+        <EditText
+            android:id="@+id/txtZona"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="15dp"
+            android:inputType="number"
+            android:layout_toRightOf="@id/imgName3"
+            android:hint="Zona" />
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_alignParentRight="true"
+            android:onClick="clearDepartamento"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_round_close_24px" />
+        <TextView
+            android:layout_toRightOf="@id/imgName3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
