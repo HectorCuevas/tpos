@@ -13,6 +13,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
+import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
+import static com.rasoftec.ApplicationTpos.p;
+
 public class locationActivity extends AppCompatActivity {
     EditText txtAddress, txtMunicipio, txtDepartamento;
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +43,13 @@ public class locationActivity extends AppCompatActivity {
         String address = txtAddress.getText().toString();
         String municipio = txtMunicipio.getText().toString();
         String departamento = txtDepartamento.getText().toString();
-        ApplicationTpos.params.add(address);
-        ApplicationTpos.params.add(municipio);
-        ApplicationTpos.params.add(departamento);
+        departamento=(departamento.equals(null)?"":departamento);
+        municipio=(municipio.equals(null))?"":municipio;
+        newFactura_encabezado.setDireccion(address);
+        newFactura_encabezado.setMunicipio(municipio);
+        newFactura_encabezado.setDepto(departamento);
+        p.add(newFactura_encabezado);
+        Toast.makeText(this, ""+ p.get(0).getNombre(), Toast.LENGTH_LONG).show();
        // addJsonArray(ApplicationTpos.detail);
         Intent cambiarActividad = new Intent(this, PhotoActivity.class);
         startActivity(cambiarActividad);

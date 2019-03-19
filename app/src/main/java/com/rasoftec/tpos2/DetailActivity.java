@@ -6,12 +6,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import com.rasoftec.tpos.R;
 import com.rasoftec.tpos2.data.factura_encabezado;
 import com.rasoftec.ApplicationTpos;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
+import static com.rasoftec.ApplicationTpos.p;
 
 public class DetailActivity extends AppCompatActivity {
     EditText txtName, txtDpi, txtNit, txtCel;
@@ -32,11 +37,11 @@ public class DetailActivity extends AppCompatActivity {
         String dpi= txtDpi.getText().toString();
         String nit = txtNit.getText().toString();
         String cel = txtCel.getText().toString();
-        //ArrayList<String> params = new ArrayList<>();
-        ApplicationTpos.params.add(dpi);//0
-        ApplicationTpos.params.add(name);//1
-        ApplicationTpos.params.add(nit);//2
-        ApplicationTpos.params.add(cel);//3
+        newFactura_encabezado.setNombre(name);
+        newFactura_encabezado.setDpi(dpi);
+        newFactura_encabezado.setNit(nit);
+        newFactura_encabezado.setCel(cel);
+       // ApplicationTpos.params.add(a);//last
         Intent changeActivity = new Intent(this, locationActivity.class);
         //changeActivity.putExtra("list", params);
         startActivity(changeActivity);

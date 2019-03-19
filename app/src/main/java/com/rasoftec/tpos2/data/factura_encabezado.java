@@ -1,5 +1,8 @@
 package com.rasoftec.tpos2.data;
 
+import android.media.Image;
+import android.widget.ImageView;
+
 public class factura_encabezado {
     public String getNumeroDpi() {
         return numeroDpi;
@@ -65,34 +68,61 @@ public class factura_encabezado {
         this.email = email;
     }
 
-    public String getDpiFrontal() {
+    public ImageView getDpiFrontal() {
         return dpiFrontal;
     }
 
-    public void setDpiFrontal(String dpiFrontal) {
+    public void setDpiFrontal(ImageView dpiFrontal) {
         this.dpiFrontal = dpiFrontal;
     }
 
-    public String getDpiTrasero() {
+    public ImageView getDpiTrasero() {
         return dpiTrasero;
     }
 
-    public void setDpiTrasero(String dpiTrasero) {
+    public void setDpiTrasero(ImageView dpiTrasero) {
         this.dpiTrasero = dpiTrasero;
+    }
+
+    public String getDpi() {
+        return dpi;
+    }
+
+    public void setDpi(String dpi) {
+        this.dpi = dpi;
     }
 
     String numeroDpi;
     String nombre;
     String nit;
+    String dpi;
     String direccion="";
     String depto="";
     String municipio="";
     String zona="";
     String email;
-    String dpiFrontal;
-    String dpiTrasero;
+    ImageView dpiFrontal;
+    ImageView dpiTrasero;
+    ImageView ghh;
 
-    public factura_encabezado(String numeroDpi, String nombre, String nit, String direccion, String depto, String municipio, String zona, String email, String dpiFrontal, String dpiTrasero) {
+    public ImageView getGhh() {
+        return ghh;
+    }
+
+    public void setGhh(ImageView ghh) {
+        this.ghh = ghh;
+    }
+
+    public String getCel() {
+        return cel;
+    }
+
+    public void setCel(String cel) {
+        this.cel = cel;
+    }
+
+    String cel;
+    /*public factura_encabezado(String numeroDpi, String nombre, String nit, String direccion, String depto, String municipio, String zona, String email, String dpiFrontal, String dpiTrasero) {
         this.numeroDpi = numeroDpi;
         this.nombre = nombre;
         this.nit = nit;
@@ -103,5 +133,5 @@ public class factura_encabezado {
         this.email = email;
         this.dpiFrontal = dpiFrontal;
         this.dpiTrasero = dpiTrasero;
-    }
+    }*/
 }
