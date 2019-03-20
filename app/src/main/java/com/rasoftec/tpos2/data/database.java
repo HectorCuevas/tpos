@@ -96,24 +96,6 @@ public class database extends SQLiteOpenHelper {
                 "    estado        INTEGER       DEFAULT 0,\n" +
                 "    fecha         DATE          DEFAULT (date('now', 'localtime') ) \n" +
                 ");\n");
-        db.execSQL("CREATE TABLE detalle_venta (\n" +
-                "    cod_detalle INTEGER       PRIMARY KEY AUTOINCREMENT\n" +
-                "                              NOT NULL,\n" +
-                "    articulo    VARCHAR (100) NOT NULL,\n" +
-                "    prec_vta    DOUBLE        NOT NULL,\n" +
-                "    cantidad    INTEGER,\n" +
-                "    total_art   DOUBLE,\n" +
-                "    estado      INTEGER       DEFAULT 0,\n" +
-                "    venta       INTEGER       NOT NULL,\n" +
-                "    nombre      VARCHAR (100) NOT NULL,\n" +
-                "    numero_cel  INTEGER       DEFAULT 0,\n" +
-                "    CONSTRAINT fk_detalle_venta_venta FOREIGN KEY (\n" +
-                "        venta\n" +
-                "    )\n" +
-                "    REFERENCES venta (cod_venta) \n" +
-                ")");
-
-
 //        Area de Cobro
         db.execSQL("CREATE TABLE \"cobro\"(\n" +
                 " cod_cobro INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
@@ -151,26 +133,46 @@ public class database extends SQLiteOpenHelper {
                 "  \"estado\" INTEGER DEFAULT 0\n" +
                 "); ");
         db.execSQL(" CREATE TABLE \"factura_encabezado\"(\n" +
-                "  \"usuario_movilizandome\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                "  \"cod_encabezado\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                "  \"usuario_movilizandome\" INTEGER,\n" +
                 "  \"cod_cliente\" VARCHAR(100),\n" +
                 "  \"forma_pag\" VARCHAR(50),\n" +
                 "  \"total\" DOUBLE,\n" +
-                "  \"dpi\" DOUBLE,\n" +
+                "  \"cobrado\" DOUBLE,\n" +
+                "  \"procesado\" VARCHAR(45) DEFAULT 'S',\n" +
+                "  \"numFactura\" INTEGER,\n" +
+                "  \"fecha\" DATE DEFAULT (date('now', 'localtime') ), \n" +
+                "  \"dpi\" INTEGER,\n" +
                 "  \"nombre\" VARCHAR(50),\n" +
                 "  \"nit\" integer,\n" +
                 "  \"direccion\" VARCHAR(50),\n" +
-                "  \"departamento\" VARCHAR(50),\n" +
                 "  \"municipio\" VARCHAR(50),\n" +
+                "  \"departamento\" VARCHAR(50),\n" +
                 "  \"zona\" VARCHAR(50),\n" +
-                "  \"email\" VARCHAR(50), \n" +
-                "  \"key_name\" text,\n" +
-                "  \"key_name\" blob\n" +
+                "  \"email\" VARCHAR(50)\n" +
                 "); ");
-        db.execSQL(" CREATE TABLE \"imagenes\"(\n" +
+        db.execSQL("CREATE TABLE detalle_venta (\n" +
+                "    cod_detalle INTEGER       PRIMARY KEY AUTOINCREMENT\n" +
+                "                              NOT NULL,\n" +
+                "    articulo    VARCHAR (100) NOT NULL,\n" +
+                "    prec_vta    DOUBLE        NOT NULL,\n" +
+                "    cantidad    INTEGER,\n" +
+                "    total_art   DOUBLE,\n" +
+                "    estado      INTEGER       DEFAULT 0,\n" +
+                "    venta       INTEGER       NOT NULL,\n" +
+                "    nombre      VARCHAR (100) NOT NULL,\n" +
+                "    numero_cel  INTEGER       DEFAULT 0,\n" +
+                "    CONSTRAINT fk_detalle_venta_encabezado FOREIGN KEY (\n" +
+                "        venta\n" +
+                "    )\n" +
+                "    REFERENCES factura_encabezado (cod_encabezado) \n" +
+                ")");
+
+       /* db.execSQL(" CREATE TABLE \"imagenes\"(\n" +
                 "  \"id_imagen\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
                 "  \"key_name\" TEXT,\n" +
                 "  \"key_image\" BLOB\n" +
-                "); ");
+                "); ");*/
     }
     public void addEntry( String name, byte[] image) throws SQLiteException {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -232,19 +234,50 @@ public class database extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
-    public int set_venta(JSONObject jsonObject) throws JSONException {
+    public int setVenta(ArrayList<nodo_producto> detalleFact,JSONObject jsonObject) throws JSONException {
+        int ultimo = get_encabezado();
+        int actual = ultimo + 1;
         //New database instance
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues encabezado = new ContentValues();
         //Add each column to each json object
-        encabezado.put("usuario", jsonObject.getString("usuario_movilizandome"));
-        encabezado.put("cod_cli", jsonObject.getString("co_cli"));
-        encabezado.put("forma_pag", jsonObject.getString("forma_pag"));
+        encabezado.put("cod_encabezado", actual);
+        encabezado.put("usuario_movilizandome", jsonObject.getString("usuario_movilizandome"));
+        encabezado.put("cod_cliente", jsonObject.getString("cod_cliente"));
+        encabezado.put("forma_pag", jsonObject.getString("forma_pago"));
         encabezado.put("total", jsonObject.getDouble("total"));
         encabezado.put("cobrado", jsonObject.getDouble("cobrado"));
-        encabezado.put("procesado", jsonObject.getString("Procesado"));
+        encabezado.put("procesado", jsonObject.getString("procesado"));
+        encabezado.put("numFactura", jsonObject.getString("num_factura"));
+       // encabezado.put("fecha", jsonObject.getString("fecha"));
+        if (get_estado() == 3) {
+            encabezado.put("fecha", fecha_actual2());
+        }
+        encabezado.put("dpi", jsonObject.getString("dpi"));
+        encabezado.put("nombre", jsonObject.getString("nombre_cliente"));
+        encabezado.put("nit", jsonObject.getString("nit"));
+        encabezado.put("direccion", jsonObject.getString("direccion"));
+        encabezado.put("municipio", jsonObject.getString("municipio"));
+        encabezado.put("departamento", jsonObject.getString("departamento"));
+        encabezado.put("zona", jsonObject.getString("zona"));
+        encabezado.put("email", jsonObject.getString("email"));
+        db.insert("factura_encabezado", null, encabezado);
 
-        return 0;
+        //insert detail
+        Iterator<nodo_producto> tem = detalleFact.iterator();
+        while (tem.hasNext()) {
+            nodo_producto tem14 = tem.next();
+            ContentValues detalle = new ContentValues();
+            detalle.put("venta", actual);
+            detalle.put("prec_vta", tem14.getPrecio());
+            detalle.put("cantidad", tem14.getCompra());
+            detalle.put("total_art", tem14.getPrecio() * tem14.getCompra());
+            detalle.put("articulo", tem14.getCodigo());
+            detalle.put("nombre", tem14.getDescripcion());
+            detalle.put("numero_cel", tem14.getNumerocel());
+            db.insert("detalle_venta", null, detalle);
+        }
+        return actual;
     }
 
     public int set_venta(ArrayList<nodo_producto> detalle, JSONObject encabezado) throws JSONException {
@@ -1316,15 +1349,12 @@ public class database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor puntero = db.rawQuery("SELECT ruta FROM configuracion ", null);
         String ruta = "";
-
         while (puntero.moveToNext()) {
             ruta = puntero.getString(puntero.getColumnIndex("ruta"));
 
 
         }
-
         puntero.close();
-
         return ruta;
 
     }

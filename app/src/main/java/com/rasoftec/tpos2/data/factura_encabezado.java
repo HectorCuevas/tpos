@@ -103,16 +103,6 @@ public class factura_encabezado {
     String email;
     ImageView dpiFrontal;
     ImageView dpiTrasero;
-    ImageView ghh;
-
-    public ImageView getGhh() {
-        return ghh;
-    }
-
-    public void setGhh(ImageView ghh) {
-        this.ghh = ghh;
-    }
-
     public String getCel() {
         return cel;
     }
@@ -122,7 +112,10 @@ public class factura_encabezado {
     }
 
     String cel;
-    /*public factura_encabezado(String numeroDpi, String nombre, String nit, String direccion, String depto, String municipio, String zona, String email, String dpiFrontal, String dpiTrasero) {
+    public factura_encabezado(){
+
+    }
+    public factura_encabezado(String numeroDpi, String nombre, String nit, String direccion, String depto, String municipio, String zona, String email) {
         this.numeroDpi = numeroDpi;
         this.nombre = nombre;
         this.nit = nit;
@@ -131,7 +124,5 @@ public class factura_encabezado {
         this.municipio = municipio;
         this.zona = zona;
         this.email = email;
-        this.dpiFrontal = dpiFrontal;
-        this.dpiTrasero = dpiTrasero;
-    }*/
+    }
 }

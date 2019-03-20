@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rasoftec.ApplicationTpos;
 import com.rasoftec.tpos.R;
 import com.rasoftec.tpos2.data.database;
 import com.rasoftec.tpos2.data.detalle;
@@ -343,15 +344,13 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
 //                movimiento(carrito);
 
                     //            Iniciamos  revisar si hay un producto de Orga
-                    Intent i = new Intent(venta.this, menu_principal.class);
+                    Intent i = new Intent(venta.this, DetailActivity.class);
                     nodo_producto t2 = existeorga(carrito);
                     if (t2 != null) {
-                        //           Log.i("Existe","si");
                         total_pos = t2.getCompra();
                         orga();
 
                     } else {
-
                         i.putExtra("ruta", ruta);
                         startActivity(i);
                     }
@@ -447,33 +446,23 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
     }
 
     private void realizar_venta(String tipo) {
-//        AsyncTask<String, Void, String> t12 = new webservice(carrito,this);
-//        String t14 = null;
+        ApplicationTpos.totalEncabezado=total_carrito(carrito);
+        ApplicationTpos.detalleVenta = carrito;
         try {
-//            Log.i("Revisar valor actual",cobro_venta.getText().toString());
             if (tipo.toLowerCase().equals("contado")) {
-                //CustomersData();
-////                t14 = t12.execute(ruta,"3",actual,cobro_venta.getText().toString()).get();
                 JSONObject tem = new JSONObject();
                 String tipo2 = "CONT";
                 tem.put("usuario_movilizandome", base.get_ruta().trim());
                 tem.put("co_cli", String.valueOf(actual));
                 tem.put("forma_pag",  CustomerNit+"."+CustomerName);
                 tem.put("total", total_carrito(carrito));
-                String[] t2 = base.get_access();
-                int t3 = Integer.parseInt(t2[1]);
-//                if(t3<=1){
-//                    tem.put("cobrado", 0.00);
-//                }else{
                 tem.put("cobrado", total_carrito(carrito));
-//            }
                 tem.put("Procesado", "S");
                 tem.put("fact_num2", 0);
                 tem.put("Cobrado2", 0.0);
                 codigo = base.set_venta(carrito, tem);
                 base.ver_detalle();
             } else if (tipo.toLowerCase().equals("credito")) {
-////                t14 = t12.execute(ruta,"3",actual,"vacio").get();
                 JSONObject tem = new JSONObject();
                 String tipo2 = "CRED";
                 tem.put("usuario_movilizandome", base.get_ruta());
@@ -481,8 +470,6 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                 tem.put("forma_pag", tipo2);
                 tem.put("total", total_carrito(carrito));
                 tem.put("cobrado", 0.00);
-
-//                tem.put("cobrado",abono_actual_v);
                 if (base.get_estado() == 3) {
                     tem.put("Procesado", "D");
                 } else {
@@ -490,16 +477,9 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
                 }
                 tem.put("fact_num2", 0);
                 tem.put("Cobrado2", 0.0);
-
                 codigo = base.set_venta(carrito, tem);
-//                base.ver_encabezado();
-                base.ver_detalle();
-//                Log.i("Venta en Efectivo",t14);
-            }
 
-//            Log.i("Venta en Efectivo",t14);
-//            JSONArray t6=null;
-//            if(t14!=null) t6=new JSONArray(t14);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

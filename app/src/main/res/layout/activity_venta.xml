@@ -15,7 +15,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/colorPrimary"
-        android:onClick="cambiarActividad"
+        android:onClick="vender"
         android:text="Vender"
         android:textAlignment="center"
         android:textColor="@android:color/white"

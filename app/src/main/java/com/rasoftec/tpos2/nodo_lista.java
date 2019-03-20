@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.rasoftec.ApplicationTpos;
 import  com.rasoftec.tpos.R;
 import com.rasoftec.tpos2.data.database;
 import com.rasoftec.tpos2.data.nodo_factura;
@@ -242,6 +243,7 @@ public class nodo_lista extends AppCompatActivity {
 public void venta(View vi){
     Intent i=new Intent(this,venta.class);
     i.putExtra("actual",codigo);
+    ApplicationTpos.codigoCliente=codigo;
     i.putExtra("nombre",nombre);
     i.putExtra("ruta",ruta_act);
     i.putExtra("tipo_venta",tipo);

@@ -104,8 +104,6 @@ public class menu_principal extends AppCompatActivity {
         i2.putExtra("tipo_venta", 2);
         startActivity(i2);
         finish();
-
-
     }
 
     @Override

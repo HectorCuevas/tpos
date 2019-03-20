@@ -17,13 +17,14 @@ import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
 import static com.rasoftec.ApplicationTpos.p;
 
 public class locationActivity extends AppCompatActivity {
-    EditText txtAddress, txtMunicipio, txtDepartamento;
+    EditText txtAddress, txtMunicipio, txtDepartamento, txtZona;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
         txtAddress = (EditText) findViewById(R.id.txtAddress);
         txtMunicipio = (EditText) findViewById(R.id.txtMunicipio);
         txtDepartamento = (EditText) findViewById(R.id.txtDepartamento);
+        txtZona = (EditText) findViewById(R.id.txtZona);
     }
 
     /*** Public methods to clear text boxes ***/
@@ -43,11 +44,13 @@ public class locationActivity extends AppCompatActivity {
         String address = txtAddress.getText().toString();
         String municipio = txtMunicipio.getText().toString();
         String departamento = txtDepartamento.getText().toString();
+        String zona = txtZona.getText().toString();
         departamento=(departamento.equals(null)?"":departamento);
         municipio=(municipio.equals(null))?"":municipio;
         newFactura_encabezado.setDireccion(address);
         newFactura_encabezado.setMunicipio(municipio);
         newFactura_encabezado.setDepto(departamento);
+        newFactura_encabezado.setZona(zona);
         p.add(newFactura_encabezado);
         Toast.makeText(this, ""+ p.get(0).getNombre(), Toast.LENGTH_LONG).show();
        // addJsonArray(ApplicationTpos.detail);

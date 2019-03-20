@@ -774,7 +774,6 @@ public class webservice extends AsyncTask<String, String, String> {
             Iterator<encabezado> ite = lista.iterator();
             while (ite.hasNext()) {
                 int codigo_movi = movilizandome();
-                Log.i("Detalle codigo movilizandome", "" + codigo_movi);
                 HashMap tem = new HashMap();
                 encabezado t14 = ite.next();
                 tem.put("id_movilizandome", codigo_movi);

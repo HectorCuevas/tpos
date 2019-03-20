@@ -19,7 +19,7 @@ import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
 import static com.rasoftec.ApplicationTpos.p;
 
 public class DetailActivity extends AppCompatActivity {
-    EditText txtName, txtDpi, txtNit, txtCel;
+    EditText txtName, txtDpi, txtNit, txtCel, txtEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +28,7 @@ public class DetailActivity extends AppCompatActivity {
         txtDpi = (EditText) findViewById(R.id.txtDpi);
         txtNit = (EditText) findViewById(R.id.txtNit);
         txtCel = (EditText) findViewById(R.id.txtTel);
+        txtEmail = (EditText) findViewById(R.id.txtEmail);
     }
 
     /*** Public method to Chance activity ***/
@@ -37,10 +38,12 @@ public class DetailActivity extends AppCompatActivity {
         String dpi= txtDpi.getText().toString();
         String nit = txtNit.getText().toString();
         String cel = txtCel.getText().toString();
+        String email = txtEmail.getText().toString();
         newFactura_encabezado.setNombre(name);
         newFactura_encabezado.setDpi(dpi);
         newFactura_encabezado.setNit(nit);
         newFactura_encabezado.setCel(cel);
+        newFactura_encabezado.setEmail(email);
        // ApplicationTpos.params.add(a);//last
         Intent changeActivity = new Intent(this, locationActivity.class);
         //changeActivity.putExtra("list", params);

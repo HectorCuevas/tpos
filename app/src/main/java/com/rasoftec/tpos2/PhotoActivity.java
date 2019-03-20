@@ -33,11 +33,16 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.support.v4.content.FileProvider.getUriForFile;
+import static com.rasoftec.ApplicationTpos.detalleVenta;
 import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
 import static com.rasoftec.ApplicationTpos.p;
 
@@ -49,13 +54,12 @@ public class PhotoActivity extends AppCompatActivity {
 
     final int COD_SELECCIONA=10;
     final int COD_FOTO=20;
-
-    database db;
     Bitmap bitmap;
+    database base;
     Button botonCargar;
     ImageView imagen;
     String path;
-    database base;
+    database dbObjetc;
     byte[] byteArray;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,7 @@ public class PhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photos);
         imagen= (ImageView) findViewById(R.id.imagemId);
         botonCargar= (Button) findViewById(R.id.btnCargarImg);
-
+        dbObjetc = new database(this);
         if(validaPermisos()){
             botonCargar.setEnabled(true);
         }else{
@@ -237,48 +241,32 @@ public class PhotoActivity extends AppCompatActivity {
 
         }
     }
-    //Function to store image
-   /* public void addContact(Contact contact) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_NAME, contact._name); // Contact Name
-        values.put(KEY_IMAGE, contact._image); // Contact Phone
-// Inserting Row
-        db.insert(TABLE_CONTACTS, null, values);
-        db.close(); // Closing database connection
-    }*/
-    public void addJsonArray(ArrayList<String> detail){
+    private Date getDate(){
+        Date currentTime = Calendar.getInstance().getTime();
+        return  currentTime;
+    }
+    public void addJsonArray(){
         try{
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("usuario_movilizandome", "");
-            jsonObject.put("cod_cliente", "");
+            jsonObject.put("usuario_movilizandome", dbObjetc.get_ruta().trim());
+            jsonObject.put("cod_cliente", ApplicationTpos.codigoCliente);
             jsonObject.put("forma_pago", "CONT");
-            jsonObject.put("total", "");
-            jsonObject.put("cobrado", "decimal");
+            jsonObject.put("total", ApplicationTpos.totalEncabezado);
+            jsonObject.put("cobrado", ApplicationTpos.totalEncabezado);
             jsonObject.put("procesado", "S");
-            jsonObject.put("num_factura", "");
-            jsonObject.put("cobrado_2", "");
-            jsonObject.put("fecha", "");
-            jsonObject.put("latitud", "");
-            jsonObject.put("longitud", "");
-
-            //jsonObject.put("latitud", "");
-            //jsonObject.put("longitud", "");
-
+            jsonObject.put("num_factura", 0);
+            jsonObject.put("cobrado_2", 0.00);
+            jsonObject.put("fecha", getDate());
             /*** required fields ***/
-            jsonObject.put("dpi", detail.get(0));
-            jsonObject.put("nombre_cliente", detail.get(1));
-            jsonObject.put("nit", detail.get(2));
-            jsonObject.put("direccion", detail.get(3));
-            jsonObject.put("municipio", detail.get(4));
-            jsonObject.put("departamento", detail.get(5));
-            //faltantes
-            jsonObject.put("zona", detail.get(7));
-            jsonObject.put("email", detail.get(8));
-
-            //jsonObject.put("dpi_frontal", "");
-            //jsonObject.put("dpi_trasero", "");
-            //storeDatabase(jsonObject);
+            jsonObject.put("dpi", p.get(0).getDpi());
+            jsonObject.put("nombre_cliente", p.get(0).getNombre());
+            jsonObject.put("nit", p.get(0).getNit());
+            jsonObject.put("direccion", p.get(0).getDireccion());
+            jsonObject.put("municipio", p.get(0).getMunicipio());
+            jsonObject.put("departamento", p.get(0).getDepto());
+            jsonObject.put("zona", p.get(0).getZona());
+            jsonObject.put("email", p.get(0).getEmail());
+            storeDatabase(jsonObject);
         }catch (JSONException e){
             Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
         }
@@ -286,29 +274,33 @@ public class PhotoActivity extends AppCompatActivity {
 
     public void storeDatabase(JSONObject jsonObject){
         try{
-            db.set_venta(jsonObject);
+            dbObjetc.setVenta(detalleVenta, jsonObject);
         }catch (Exception e){
             Toast.makeText(this, "No se ha podido crear el objeto json", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void checkout(View view){
-       /* SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues cv = new  ContentValues();
-        newFactura_encabezado.setDpiFrontal(imagen);
-        Toast.makeText(this,""+newFactura_encabezado.getGhh(), Toast.LENGTH_LONG ).show();
-        // addJsonArray(ApplicationTpos.params);
-        Intent cambiarActividad = new Intent(this, PhotoActivity.class);
+        addJsonArray();
+        Toast.makeText(this, "Almacenado con exito", Toast.LENGTH_SHORT).show();
+        /*Intent cambiarActividad = new Intent(this, PhotoActivity.class);
         startActivity(cambiarActividad);
         if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
             startActivity(cambiarActividad);
         }*/
-        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_baseline_email_24px);
+       /* Intent i = new Intent(venta.this, menu_principal.class);
+        nodo_producto t2 = existeorga(carrito);
+        if (t2 != null) {
+            //           Log.i("Existe","si");
+            total_pos = t2.getCompra();
+            orga();
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,50,stream);
-        byte[] byteArray = stream.toByteArray();
-        Toast.makeText(this, ""+byteArray, Toast.LENGTH_LONG).show();
-        base.addEntry("asd", byteArray);
+        } else {
+
+            i.putExtra("ruta", ruta);
+            startActivity(i);
+        }
+        info("Se Realizo la Venta con Exito");
+        base.setcliente(actual);*/
     }
 }
