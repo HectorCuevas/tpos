@@ -1,6 +1,12 @@
 package com.rasoftec.tpos2;
 
-import android.content.ContentValues;
+import org.ksoap2.SoapEnvelope;
+
+import android.app.ProgressDialog;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -21,7 +28,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.rasoftec.ApplicationTpos;
@@ -41,6 +51,7 @@ import java.util.Date;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 import static android.support.v4.content.FileProvider.getUriForFile;
 import static com.rasoftec.ApplicationTpos.detalleVenta;
 import static com.rasoftec.ApplicationTpos.newFactura_encabezado;
@@ -61,6 +72,23 @@ public class PhotoActivity extends AppCompatActivity {
     String path;
     database dbObjetc;
     byte[] byteArray;
+
+    //EditText ed_input;
+    //RadioGroup rg_temp;
+    //RadioButton radioTemp;
+    //Button btn_convert;
+    String tempValue;
+    ProgressDialog pdialog;
+    SoapObject encabezado, detalle;
+    SoapPrimitive fahtocel, celtofah;
+
+    String METHOD_NAME1 = "detalle_insert";
+    String METHOD_NAME2 = "FahrenheitToCelsius";
+    String SOAP_ACTION1 = "http://grupomenas.carrierhouse.us/wstposp/detalle_insert";
+    String SOAP_ACTION2 = "http://www.w3schools.com/webservices/FahrenheitToCelsius";
+
+    String NAMESPACE = "http://grupomenas.carrierhouse.us/wstposp/";
+    String  SOAP_URL = "http://grupomenas.carrierhouse.us/wstposp/GetStockArtWS.asmx";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -281,8 +309,10 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     public void checkout(View view){
-        addJsonArray();
-        Toast.makeText(this, "Almacenado con exito", Toast.LENGTH_SHORT).show();
+        CelsiusAsync celsiustofahr = new CelsiusAsync();
+        celsiustofahr.execute();
+        //addJsonArray();
+       // Toast.makeText(get, "Almacenado con exito", Toast.LENGTH_SHORT).show();
         /*Intent cambiarActividad = new Intent(this, PhotoActivity.class);
         startActivity(cambiarActividad);
         if (cambiarActividad.resolveActivity(getPackageManager()) != null) {
@@ -302,5 +332,53 @@ public class PhotoActivity extends AppCompatActivity {
         }
         info("Se Realizo la Venta con Exito");
         base.setcliente(actual);*/
+
+    }
+
+    private class CelsiusAsync extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+
+            detalle = new SoapObject(NAMESPACE, METHOD_NAME1);
+            detalle.addProperty("id_mov", 90001280);
+            detalle.addProperty("usuarioMov", "99204");
+            detalle.addProperty("co_art", "ORGA.01");
+            detalle.addProperty("prec_vta", 1);
+            detalle.addProperty("cantidad", 100);
+            detalle.addProperty("total_art", 55);
+            detalle.addProperty("telefono", "58383011");
+            detalle.addProperty("serial", "11110");
+
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            envelope.dotNet = true;
+            envelope.setOutputSoapObject(detalle);
+            HttpTransportSE httpTransport = new HttpTransportSE(SOAP_URL);
+            try {
+                httpTransport.call(SOAP_ACTION1, envelope);
+                fahtocel = (SoapPrimitive) envelope.getResponse();
+            } catch (Exception e) {
+                e.getMessage();
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            pdialog.dismiss();
+            Toast.makeText(getApplicationContext(), "Enc success" , Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pdialog = new ProgressDialog(PhotoActivity.this);
+            pdialog.setMessage("Sincronizando...");
+            pdialog.show();
+        }
     }
 }
