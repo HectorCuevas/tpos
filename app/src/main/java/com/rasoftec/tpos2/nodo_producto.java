@@ -70,6 +70,9 @@ public class nodo_producto {
         this.numero_cel = numero_cel;
 
     }
+    public nodo_producto() {
+
+    }
 
     @Override
     public String toString() {

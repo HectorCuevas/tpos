@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.rasoftec.tpos2.beans.detalleFactura;
 import com.rasoftec.tpos2.data.factura_encabezado;
 import com.rasoftec.tpos2.nodo_producto;
 
@@ -19,7 +20,10 @@ public class ApplicationTpos extends Application {
     public static byte[] byteArray;
     public static double totalEncabezado;
     public static String codigoCliente;
+    public static String usuarioMovilizandome;
+    public static int codigoMovilizandome;
     public static ArrayList<nodo_producto> detalleVenta = new ArrayList<>();
+    public static ArrayList<detalleFactura> detalleFactura = new ArrayList<>();
   //  public static List<factura_encabezado> p = new List<factura_encabezado>() {
 
 }

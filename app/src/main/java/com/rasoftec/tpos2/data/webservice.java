@@ -816,24 +816,24 @@ public class webservice extends AsyncTask<String, String, String> {
                 // Add the Jackson message converter
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 t_c = restTemplate.postForObject(url, tem, JSONArray.class);
-                try {
-                    JSONObject estado = t_c.getJSONObject(0);
-
-                    if (estado.getString("resultado").equals("true")) {
-//                        base.set_encabezado(t14.encabezado);
-                        base.set_venta(t14.encabezado, codigo_movi);
-                        Log.i("Valor Encabezado", estado.getString("resultado"));
-                    }
-                } catch (JSONException e) {
-
-                    String erf = "Error irrecuperable al sincronizar ventas, intente de nuevo la sincronizacion.\n" + e.getLocalizedMessage();
-                    publishProgress(erf, "Error en Sincronizacion(JSON)");
-                    try {
-                        Thread.sleep(4000);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                }
+//                try {
+//                  //  JSONObject estado = t_c.getJSONObject(0);
+////
+////                    if (estado.getString("resultado").equals("true")) {
+//////                        base.set_encabezado(t14.encabezado);
+////                        base.set_venta(t14.encabezado, codigo_movi);
+////                        Log.i("Valor Encabezado", estado.getString("resultado"));
+////                    }
+//                } catch (JSONException e) {
+//
+//                    String erf = "Error irrecuperable al sincronizar ventas, intente de nuevo la sincronizacion.\n" + e.getLocalizedMessage();
+//                    publishProgress(erf, "Error en Sincronizacion(JSON)");
+//                    try {
+//                        Thread.sleep(4000);
+//                    } catch (InterruptedException e1) {
+//                        e1.printStackTrace();
+//                    }
+//                }
             }
         } catch (Exception e) {
             String erf = "Error irrecuperable al sincronizar en Ventas, intente de nuevo la sincronizacion.\n" + e.getLocalizedMessage();
@@ -1056,7 +1056,7 @@ public class webservice extends AsyncTask<String, String, String> {
         }
     }
 
-    private int movilizandome() {
+    public int movilizandome() {
         String url = "http://tarjetazo.eastus2.cloudapp.azure.com/Tpos/PROSISCO_REST/api/dt_SP_ID_Virtual_Movilizandome";
         RestTemplate restTemplate = new RestTemplate();
         // Add the Jackson message converter

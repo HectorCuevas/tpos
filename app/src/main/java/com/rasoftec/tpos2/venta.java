@@ -250,7 +250,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
     }
 
     public void vender(View v) {
-       Iterator<nodo_producto> ite = carrito.iterator();
+        Iterator<nodo_producto> ite = carrito.iterator();
         double total_actual = 0;
         String descripcion = "";
         while (ite.hasNext()) {
@@ -262,7 +262,7 @@ public class venta extends AppCompatActivity implements SearchView.OnQueryTextLi
             forma_pago(descripcion, total_actual);
             //This function displays dialog message if it's name or nit // return Alertdialog type: dialog
             //CustomersData("Ingrese Nombre del cliente", true);
-           // CustomersData("Ingrese Nit del cliente", false);
+            // CustomersData("Ingrese Nit del cliente", false);
         } else {
             info("El Valor de la Venta debe ser Mayor de Q 0.00");
         }

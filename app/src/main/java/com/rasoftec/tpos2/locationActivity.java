@@ -52,7 +52,6 @@ public class locationActivity extends AppCompatActivity {
         newFactura_encabezado.setDepto(departamento);
         newFactura_encabezado.setZona(zona);
         p.add(newFactura_encabezado);
-        Toast.makeText(this, ""+ p.get(0).getNombre(), Toast.LENGTH_LONG).show();
        // addJsonArray(ApplicationTpos.detail);
         Intent cambiarActividad = new Intent(this, PhotoActivity.class);
         startActivity(cambiarActividad);

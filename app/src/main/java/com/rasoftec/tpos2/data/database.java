@@ -1,5 +1,6 @@
 package com.rasoftec.tpos2.data;
 
+import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,7 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.rasoftec.ApplicationTpos;
 import com.rasoftec.tpos2.Nodo_tarea;
+import com.rasoftec.tpos2.beans.detalleFactura;
 import com.rasoftec.tpos2.nodo_producto;
 
 import org.json.JSONException;
@@ -240,6 +243,7 @@ public class database extends SQLiteOpenHelper {
         //New database instance
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues encabezado = new ContentValues();
+        ApplicationTpos.codigoMovilizandome = actual;
         //Add each column to each json object
         encabezado.put("cod_encabezado", actual);
         encabezado.put("usuario_movilizandome", jsonObject.getString("usuario_movilizandome"));
@@ -267,7 +271,17 @@ public class database extends SQLiteOpenHelper {
         Iterator<nodo_producto> tem = detalleFact.iterator();
         while (tem.hasNext()) {
             nodo_producto tem14 = tem.next();
-            ContentValues detalle = new ContentValues();
+            detalleFactura detalle = new detalleFactura();
+            detalle.setIdMovilizandome(actual);
+            detalle.setUsuarioMovilizandome(ApplicationTpos.usuarioMovilizandome);
+            detalle.setCodigoArticulo(tem14.getCodigo());
+            detalle.setPrecioArticulo(tem14.getPrecio());
+            detalle.setCantidad(tem14.getCompra());
+            detalle.setTotalFactura(tem14.getPrecio() * tem14.getCompra());
+            detalle.setNumeroCel(tem14.getNumerocel());
+            ApplicationTpos.detalleFactura.add(detalle);
+
+         /*   ContentValues detalle = new ContentValues();
             detalle.put("venta", actual);
             detalle.put("prec_vta", tem14.getPrecio());
             detalle.put("cantidad", tem14.getCompra());
@@ -275,7 +289,7 @@ public class database extends SQLiteOpenHelper {
             detalle.put("articulo", tem14.getCodigo());
             detalle.put("nombre", tem14.getDescripcion());
             detalle.put("numero_cel", tem14.getNumerocel());
-            db.insert("detalle_venta", null, detalle);
+            db.insert("detalle_venta", null, detalle);*/
         }
         return actual;
     }
