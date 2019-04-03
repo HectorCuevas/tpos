@@ -40,6 +40,8 @@ public class nodo_factura {
     String codigo_factura;
     String fecha;
     double saldo;
+
+
     double pago;
 
     public int getCliente() {
